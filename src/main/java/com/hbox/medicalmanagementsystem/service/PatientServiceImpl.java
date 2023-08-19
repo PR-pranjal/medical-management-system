@@ -2,6 +2,7 @@ package com.hbox.medicalmanagementsystem.service;
 
 import com.hbox.medicalmanagementsystem.entity.Patient;
 import com.hbox.medicalmanagementsystem.repository.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class PatientServiceImpl implements PatientService{
 
     @Override
     public List<Patient> getPatientsByDoctorId(Long doctorId) {
-        return patientRepository.findByDoctorId(doctorId);
+        return patientRepository.findByDoctorDoctorId(doctorId);
 
     }
 }
