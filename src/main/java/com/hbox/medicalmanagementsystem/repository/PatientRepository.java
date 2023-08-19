@@ -7,4 +7,10 @@ import java.util.List;
 
 public interface PatientRepository extends JpaRepository<Patient,Long> {
     List<Patient> findByDoctorDoctorId(Long doctorId);
+
+    List<Patient> findPatientsByClinicId(Long id);
+    List<Patient> findByFirstNameOrLastName(String firstName,String lastName);
+    Patient findPatientsByEmrNumber(String emrNumber);
+
+
 }

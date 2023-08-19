@@ -17,5 +17,10 @@ public class Patient {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private Clinic  clinic;
+
+
 
 }

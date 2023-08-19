@@ -19,4 +19,19 @@ public class PatientServiceImpl implements PatientService{
         return patientRepository.findByDoctorDoctorId(doctorId);
 
     }
+
+    @Override
+    public List<Patient> getPatientsByClinicId(Long id) {
+        return patientRepository.findPatientsByClinicId(id);
+    }
+
+    @Override
+    public List<Patient> getPatientsByFirstNameOrLastName(String name) {
+        return patientRepository.findByFirstNameOrLastName(name,name);
+    }
+
+    @Override
+    public Patient getPatientByEmrNumber(String emrNumber) {
+       return patientRepository.findPatientsByEmrNumber(emrNumber);
+    }
 }
