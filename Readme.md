@@ -74,7 +74,7 @@ Go to the project directory
   cd my-project
 ```
 
-Install dependencies
+Build 
 
 ```bash
   gradle build
