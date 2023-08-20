@@ -18,6 +18,7 @@ public class PatientServiceImpl implements PatientService{
 
     private final DoctorService doctorService;
 
+
     public PatientServiceImpl(PatientRepository patientRepository, DoctorService doctorService) {
         this.patientRepository = patientRepository;
         this.doctorService = doctorService;
