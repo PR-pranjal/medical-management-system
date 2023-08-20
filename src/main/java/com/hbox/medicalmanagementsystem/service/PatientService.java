@@ -12,4 +12,10 @@ public interface PatientService {
     public List<Patient> getPatientsByFirstNameOrLastName(String name);
 
     public Patient getPatientByEmrNumber(String emrNumber);
+
+    public Patient addPatient(Patient patient);
+   // public Patient updatePatient(Patient patient);
+
+    public void deletePatient(Long patientId);
+    public Patient updatePatient(Patient newPatient);
 }

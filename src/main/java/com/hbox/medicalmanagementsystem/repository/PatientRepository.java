@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PatientRepository extends JpaRepository<Patient,Long> {
-    List<Patient> findByDoctorDoctorId(Long doctorId);
+    List<Patient> findByDoctorId(Long doctorId);
 
-    List<Patient> findPatientsByClinicId(Long id);
+    List<Patient> findClinicPatientById(Long id);
     List<Patient> findByFirstNameOrLastName(String firstName,String lastName);
     Patient findPatientsByEmrNumber(String emrNumber);
 

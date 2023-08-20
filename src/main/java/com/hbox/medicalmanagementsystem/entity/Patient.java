@@ -14,12 +14,10 @@ public class Patient {
     private String gender;
     private String dob;
     private String emrNumber;
-    @ManyToOne
     @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
-    @ManyToOne
+    private Long doctorId;
     @JoinColumn(name = "id")
-    private Clinic  clinic;
+    private Long  id;
 
 
 

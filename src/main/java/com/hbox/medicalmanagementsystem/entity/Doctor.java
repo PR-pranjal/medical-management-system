@@ -14,8 +14,7 @@ public class Doctor {
    private String firstName;
    private String lastName;
    private String speciality;
-   @ManyToOne
    @JoinColumn(name = "id")
-   private Clinic clinic;
+   private Long id;
 
 }
