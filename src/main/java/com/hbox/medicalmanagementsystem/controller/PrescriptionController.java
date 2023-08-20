@@ -18,7 +18,6 @@ public class PrescriptionController {
         this.prescriptionService = prescriptionService;
     }
 
-
     @PostMapping("/add-prescription")
     public ResponseEntity<Prescription> addPrescription(@RequestBody Prescription prescription){
         Prescription prescriptionToAdd=prescriptionService.addPrescription(prescription);

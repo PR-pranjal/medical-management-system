@@ -1,6 +1,5 @@
 package com.hbox.medicalmanagementsystem.service;
 
-import com.hbox.medicalmanagementsystem.entity.Clinic;
 import com.hbox.medicalmanagementsystem.entity.Doctor;
 import com.hbox.medicalmanagementsystem.entity.Patient;
 import com.hbox.medicalmanagementsystem.repository.ClinicRepository;
@@ -9,20 +8,19 @@ import com.hbox.medicalmanagementsystem.repository.PatientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PatientServiceImpl implements PatientService{
     private final PatientRepository patientRepository;
-    private final DoctorRepository doctorRepository;
 
-    private final ClinicRepository clinicRepository;
+    private final DoctorService doctorService;
 
-    public PatientServiceImpl(PatientRepository patientRepository, DoctorRepository doctorRepository, ClinicRepository clinicRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, DoctorService doctorService) {
         this.patientRepository = patientRepository;
-        this.doctorRepository = doctorRepository;
-        this.clinicRepository = clinicRepository;
+        this.doctorService = doctorService;
     }
 
     @Override
@@ -33,7 +31,15 @@ public class PatientServiceImpl implements PatientService{
 
     @Override
     public List<Patient> getPatientsByClinicId(Long id) {
-        return patientRepository.findClinicPatientById(id);
+        List<Doctor> doctorsInClinic = doctorService.getDoctorsByClinicId(id);
+        List<Patient> patientsInClinic = new ArrayList<>();
+
+        for (Doctor doctor : doctorsInClinic) {
+            List<Patient> patientsForDoctor = patientRepository.findByDoctorId(doctor.getDoctorId());
+            patientsInClinic.addAll(patientsForDoctor);
+        }
+
+        return patientsInClinic;
     }
 
     @Override
@@ -47,16 +53,22 @@ public class PatientServiceImpl implements PatientService{
     }
 
     @Override
-    public Patient addPatient(Patient patient) {
-//        System.out.println(patient);
-//        if (patient.getDoctor() == null) {
-//            throw new IllegalArgumentException("The Respective Doctor doesn't exist.");
-//        }
-//
-//        if (patient.getClinic() == null) {
-//            throw new IllegalArgumentException("The Respective Clinic doesn't exist.");
-//        }
+    public List<Patient> getOldAgePatient() {
+        LocalDate today=LocalDate.now();
+        LocalDate comparable=today.minusYears(60);
+        List<Patient> patientList=patientRepository.findAll();
+        List<Patient> oldAgePatientList=new ArrayList<>();
+        for(Patient patient:patientList){
+            LocalDate dateOfBirth=LocalDate.parse(patient.getDob());
+            if(dateOfBirth.isBefore(comparable)){
+                oldAgePatientList.add(patient);
+            }
+        }
+        return oldAgePatientList;
+    }
 
+    @Override
+    public Patient addPatient(Patient patient) {
         return patientRepository.save(patient);
     }
 
@@ -78,7 +90,6 @@ public class PatientServiceImpl implements PatientService{
         existingPatient.setDoctorId(newPatient.getDoctorId());
         existingPatient.setGender(newPatient.getGender());
         existingPatient.setEmrNumber(newPatient.getEmrNumber());
-        existingPatient.setId(newPatient.getId());
         return patientRepository.save(existingPatient);
     }
 

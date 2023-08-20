@@ -16,8 +16,7 @@ public class Patient {
     private String emrNumber;
     @JoinColumn(name = "doctor_id")
     private Long doctorId;
-    @JoinColumn(name = "id")
-    private Long  id;
+
 
 
 

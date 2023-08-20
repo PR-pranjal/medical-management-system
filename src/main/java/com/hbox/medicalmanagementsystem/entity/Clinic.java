@@ -17,14 +17,6 @@ public class Clinic {
     private String city;
     private String state;
 
-    public Clinic(Long id,String name, String address, String city, String state) {
-        this.id=id;
-        this.name = name;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-    }
-
     public Clinic() {
 
     }

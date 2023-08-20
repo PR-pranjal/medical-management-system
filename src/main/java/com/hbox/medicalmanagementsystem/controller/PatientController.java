@@ -23,10 +23,15 @@ public class PatientController {
         List<Patient> patients=patientService.getPatientsByFirstNameOrLastName(name);
         return new ResponseEntity<>(patients, HttpStatus.OK);
     }
-    @GetMapping("/search/emrNumber/{emrNumber}")
+    @GetMapping("/search/emr-number/{emrNumber}")
     public ResponseEntity<Patient> searchPatientByEmrNumber(@PathVariable String emrNumber){
         Patient patient=patientService.getPatientByEmrNumber(emrNumber);
         return new ResponseEntity<>(patient,HttpStatus.OK);
+    }
+    @GetMapping("/search/patient-age")
+    public ResponseEntity<List<Patient>> getAllPatientsByAge(){
+        List<Patient> patients=patientService.getOldAgePatient();
+        return new ResponseEntity<>(patients,HttpStatus.OK);
     }
 
     @PostMapping("/add-patient")
