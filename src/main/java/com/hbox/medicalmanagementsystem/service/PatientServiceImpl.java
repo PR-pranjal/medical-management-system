@@ -26,7 +26,7 @@ public class PatientServiceImpl implements PatientService{
 
     @Override
     public List<Patient> getPatientsByDoctorId(Long doctorId) {
-        return patientRepository.findByDoctorId(doctorId);
+        return patientRepository.findByDoctorDoctorId(doctorId);
 
     }
 
@@ -36,7 +36,7 @@ public class PatientServiceImpl implements PatientService{
         List<Patient> patientsInClinic = new ArrayList<>();
 
         for (Doctor doctor : doctorsInClinic) {
-            List<Patient> patientsForDoctor = patientRepository.findByDoctorId(doctor.getDoctorId());
+            List<Patient> patientsForDoctor = patientRepository.findByDoctorDoctorId(doctor.getDoctorId());
             patientsInClinic.addAll(patientsForDoctor);
         }
 
@@ -88,7 +88,8 @@ public class PatientServiceImpl implements PatientService{
         existingPatient.setFirstName(newPatient.getFirstName());
         existingPatient.setLastName(newPatient.getLastName());
         existingPatient.setDob(newPatient.getDob());
-        existingPatient.setDoctorId(newPatient.getDoctorId());
+        //existingPatient.setDoctorId(newPatient.getDoctorId());
+        existingPatient.setDoctor(newPatient.getDoctor());
         existingPatient.setGender(newPatient.getGender());
         existingPatient.setEmrNumber(newPatient.getEmrNumber());
         return patientRepository.save(existingPatient);

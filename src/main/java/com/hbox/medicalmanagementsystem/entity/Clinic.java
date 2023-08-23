@@ -17,6 +17,7 @@ public class Clinic {
     private String city;
     private String state;
 
+
     public Clinic() {
 
     }

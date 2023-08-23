@@ -15,6 +15,6 @@ public class DoctorServiceImpl implements DoctorService{
 
     @Override
     public List<Doctor> getDoctorsByClinicId(Long clinicId) {
-       return doctorRepository.findClinicById(clinicId);
+       return doctorRepository.findByClinicId(clinicId);
     }
 }

@@ -9,12 +9,14 @@ import java.time.LocalDateTime;
 @Entity
 public class Prescription {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long prescriptionId;
+    @ManyToOne
     @JoinColumn(name = "patient_id")
-    private Long patientId;
+    private Patient patient;
+    @ManyToOne
     @JoinColumn(name = "doctor_id")
-    private Long doctorId;
+    private Doctor doctor;
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
     private String cause;
