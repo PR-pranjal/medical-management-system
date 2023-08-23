@@ -57,8 +57,6 @@ public class PrescriptionServiceImpl implements PrescriptionService{
         existingPrescription.setPrescriptionId(newPrescription.getPrescriptionId());
         existingPrescription.setNotes(newPrescription.getNotes());
         existingPrescription.setCause(newPrescription.getCause());
-       // existingPrescription.setDoctorId(newPrescription.getDoctorId());
-       // existingPrescription.setPatientId(newPrescription.getPatientId());
         existingPrescription.setDoctor(newPrescription.getDoctor());
         existingPrescription.setPatient(newPrescription.getPatient());
         existingPrescription.setCreatedDateTime(newPrescription.getCreatedDateTime());
@@ -123,120 +121,9 @@ public class PrescriptionServiceImpl implements PrescriptionService{
         dto.setDoctorFullName(prescription.getDoctor().getFirstName() + " " + prescription.getDoctor().getLastName());
         dto.setClinicName(prescription.getDoctor().getClinic().getName());
         dto.setCreatedDateTime(prescription.getCreatedDateTime());
+        dto.setNotes(prescription.getNotes());
         dto.setCause(prescription.getCause());
         return dto;
     }
 
-
-
-    //    @Override
-//    public List<PrescriptionResponse> getAllPrescriptions() {
-//        List<Prescription> prescriptions = prescriptionRepository.findAll();
-//        List<PrescriptionResponse> Prescriptions = new ArrayList<>();
-//
-//        for (Prescription prescription : prescriptions) {
-//            PrescriptionResponse response = new PrescriptionResponse();
-//            response.setPrescriptionId(prescription.getPrescriptionId());
-//
-//            Optional<Patient> patientOptional = patientRepository.findById(prescription.getPatientId());
-//            patientOptional.ifPresent(patient -> {
-//                response.setPatientFullName(patient.getFirstName() + " " + patient.getLastName());
-//                response.setPatientEmrNumber(patient.getEmrNumber());
-//            });
-//
-//            Optional<Doctor> doctorOptional = doctorRepository.findById(prescription.getDoctorId());
-//            doctorOptional.ifPresent(doctor -> {
-//                response.setDoctorFullName(doctor.getFirstName() + " " + doctor.getLastName());
-//            });
-//
-//            response.setCreatedDateTime(prescription.getCreatedDateTime());
-//            response.setCause(prescription.getCause());
-//            response.setNotes(prescription.getNotes());
-//
-//            Prescriptions.add(response);
-//        }
-//
-//        return Prescriptions;
-//    }
-//    @Override
-//    public Page<PrescriptionResponse> getAllPrescriptions(
-//            String patientName,
-//            String doctorName,
-//            String clinicName,
-//            String prescriptionCause,
-//            LocalDateTime createdFrom,
-//            LocalDateTime createdTo,
-//            String sortField,
-//            Sort.Direction sortDirection,
-//            int page,
-//            int pageSize
-//    ) {
-//        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sortDirection, sortField));
-//
-//        Specification<Prescription> specification = Specification.where(null);
-//
-//        if (patientName != null) {
-//            specification = specification.and((root, query, criteriaBuilder) ->
-//                    criteriaBuilder.or(
-//                            criteriaBuilder.like(criteriaBuilder.lower(root.join("patient").<String>get("firstName")), "%" + patientName.toLowerCase() + "%"),
-//                            criteriaBuilder.like(criteriaBuilder.lower(root.join("patient").<String>get("lastName")), "%" + patientName.toLowerCase() + "%")
-//                    )
-//            );
-//        }
-//        if (doctorName != null) {
-//            specification = specification.and((root, query, criteriaBuilder) ->
-//                    criteriaBuilder.or(
-//                            criteriaBuilder.like(criteriaBuilder.lower(root.join("doctor").<String>get("firstName")), "%" + doctorName.toLowerCase() + "%"),
-//                            criteriaBuilder.like(criteriaBuilder.lower(root.join("doctor").<String>get("lastName")), "%" + doctorName.toLowerCase() + "%")
-//                    )
-//            );
-//        }
-//        if (clinicName != null) {
-//            specification = specification.and((root, query, criteriaBuilder) ->
-//                    criteriaBuilder.like(criteriaBuilder.lower(root.join("doctor").join("id").<String>get("name")), "%" + clinicName.toLowerCase() + "%")
-//            );
-//        }
-//        if (prescriptionCause != null) {
-//            specification = specification.and((root, query, criteriaBuilder) ->
-//                    criteriaBuilder.like(criteriaBuilder.lower(root.<String>get("cause")), "%" + prescriptionCause.toLowerCase() + "%")
-//            );
-//        }
-//        if (createdFrom != null && createdTo != null) {
-//            specification = specification.and((root, query, criteriaBuilder) ->
-//                    criteriaBuilder.between(root.<LocalDateTime>get("createdDateTime"), createdFrom, createdTo)
-//            );
-//        }
-//
-//        return prescriptionRepository.findAll(specification, pageable)
-//                .map(this::mapToPrescriptionResponse);
-//
-//    }
-//    private PrescriptionResponse mapToPrescriptionResponse(Prescription prescription) {
-//        PrescriptionResponse response = new PrescriptionResponse();
-//        response.setPrescriptionId(prescription.getPrescriptionId());
-//
-//        Optional<Patient> patientOptional = patientRepository.findById(prescription.getPatient().getPatientId());
-//        patientOptional.ifPresent(patient -> {
-//            response.setPatientFullName(patient.getFirstName() + " " + patient.getLastName());
-//            response.setPatientEmrNumber(patient.getEmrNumber());
-//        });
-//
-//        Optional<Doctor> doctorOptional = doctorRepository.findById(prescription.getDoctor().getDoctorId());
-//        doctorOptional.ifPresent(doctor -> {
-//            response.setDoctorFullName(doctor.getFirstName() + " " + doctor.getLastName());
-//            Long clinicId = doctor.getClinic().getClinicId();
-//            Optional<Clinic> clinicOptional = clinicRepository.findById(clinicId);
-//            clinicOptional.ifPresent(clinic -> {
-//                response.setClinicName(clinic.getName());
-//            });
-//
-//        });
-//
-//
-//        response.setCreatedDateTime(prescription.getCreatedDateTime());
-//        response.setCause(prescription.getCause());
-//        response.setNotes(prescription.getNotes());
-//
-//        return response;
-//    }
 }

@@ -45,7 +45,7 @@ public class PrescriptionController {
                                                        @RequestParam(required=false) String sortBy,
                                                        @RequestParam(required = false) String sortOrder,
                                                        @RequestParam(value = "pageNumber",defaultValue = "1",required = false) Integer pageNumber,
-                                                       @RequestParam(value = "pageSize",defaultValue = "1",required = false) Integer pageSize
+                                                       @RequestParam(value = "pageSize",defaultValue = "1000",required = false) Integer pageSize
 
     ) {
         if (searchTerm != null) {
