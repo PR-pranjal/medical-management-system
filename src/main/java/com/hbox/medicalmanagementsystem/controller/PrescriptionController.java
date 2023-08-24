@@ -45,15 +45,16 @@ public class PrescriptionController {
                                                        @RequestParam(required=false) String sortBy,
                                                        @RequestParam(required = false) String sortOrder,
                                                        @RequestParam(value = "pageNumber",defaultValue = "1",required = false) Integer pageNumber,
-                                                       @RequestParam(value = "pageSize",defaultValue = "1000",required = false) Integer pageSize
+                                                       @RequestParam(value = "pageSize",defaultValue = "1000",required = false) Integer pageSize,
+                                                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
+                                                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate,
+                                                       @RequestParam(required = false) String doctorName,
+                                                       @RequestParam(required = false) String clinicName
 
     ) {
-        if (searchTerm != null) {
-            return prescriptionService.getAllPrescription(searchTerm,sortBy,sortOrder,pageNumber,pageSize);
-        } else {
 
-            return null;
-        }
+            return prescriptionService.getAllPrescription(searchTerm,sortBy,sortOrder,fromDate,toDate,doctorName,clinicName,pageNumber,pageSize);
+
     }
 
 

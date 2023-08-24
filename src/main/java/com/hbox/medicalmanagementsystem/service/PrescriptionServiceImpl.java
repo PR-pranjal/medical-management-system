@@ -65,7 +65,7 @@ public class PrescriptionServiceImpl implements PrescriptionService{
     }
 
     @Override
-    public List<PrescriptionResponse> getAllPrescription(String searchTerm,String sortBy,String sortOrder,Integer pageNumber,Integer pageSize) {
+    public List<PrescriptionResponse> getAllPrescription(String searchTerm,String sortBy,String sortOrder,LocalDateTime fromDate,LocalDateTime toDate,String doctorName,String clinicName,Integer pageNumber,Integer pageSize) {
 
 
         Pageable pageable=PageRequest.of(pageNumber-1,pageSize);
@@ -83,6 +83,29 @@ public class PrescriptionServiceImpl implements PrescriptionService{
         } else {
             Page<Prescription> prescriptionPage = prescriptionRepository.findAll(pageable);
             prescriptions.addAll(prescriptionPage.getContent());
+        }
+
+        if(fromDate != null && toDate != null){
+            prescriptions.removeIf(prescription -> prescription.getCreatedDateTime().isBefore(fromDate)
+            || prescription.getCreatedDateTime().isAfter(toDate));
+        }
+        if(doctorName!=null){
+            String[] doctorNameParts=doctorName.split("\\s+",2);
+            String firstName=doctorNameParts[0].toLowerCase();
+            String lastName;
+            if(doctorNameParts.length>1){
+                lastName=doctorNameParts[1].toLowerCase();
+            }
+            else{
+                lastName="";
+            }
+            prescriptions.removeIf(prescription ->
+                    !prescription.getDoctor().getFirstName().toLowerCase().contains(firstName)||
+                    !prescription.getDoctor().getLastName().toLowerCase().contains(lastName));
+        }
+        if(clinicName!=null){
+            prescriptions.removeIf(prescription ->
+                    !prescription.getDoctor().getClinic().getName().contains(clinicName));
         }
         if(sortBy!=null && sortOrder!=null){
             if ("patientName".equalsIgnoreCase(sortBy)) {
