@@ -17,16 +17,6 @@ public interface PrescriptionService {
     public Prescription updatePrescription(Prescription prescription);
 
     public List<PrescriptionResponse> getAllPrescription(String search, String sortBy, String sortOrder, LocalDateTime fromDate,LocalDateTime toDate,String doctorName,String clinicName,Integer pageNumber, Integer pageSize);
-//    public Page<PrescriptionResponse> getAllPrescriptions(
-//            String patientName,
-//            String doctorName,
-//            String clinicName,
-//            String prescriptionCause,
-//            LocalDateTime createdFrom,
-//            LocalDateTime createdTo,
-//            String sortField,
-//            Sort.Direction sortDirection,
-//            int page,
-//            int pageSize
-//    );
+
+
 }

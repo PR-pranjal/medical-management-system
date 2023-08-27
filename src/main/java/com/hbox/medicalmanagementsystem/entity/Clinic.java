@@ -18,9 +18,6 @@ public class Clinic {
     private String state;
 
 
-    public Clinic() {
-
-    }
 
 
 }

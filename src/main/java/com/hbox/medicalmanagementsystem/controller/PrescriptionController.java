@@ -1,11 +1,16 @@
 package com.hbox.medicalmanagementsystem.controller;
 
+import com.hbox.medicalmanagementsystem.dto.PageRequestDto;
+import com.hbox.medicalmanagementsystem.dto.RequestDto;
 import com.hbox.medicalmanagementsystem.entity.Prescription;
+import com.hbox.medicalmanagementsystem.repository.PrescriptionRepository;
 import com.hbox.medicalmanagementsystem.response.PrescriptionResponse;
 import com.hbox.medicalmanagementsystem.service.PrescriptionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hbox.medicalmanagementsystem.service.SpecificationService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +24,13 @@ import java.util.Map;
 @RequestMapping("/prescriptions")
 public class PrescriptionController {
     private final PrescriptionService prescriptionService;
+    private final PrescriptionRepository prescriptionRepository;
+    private final SpecificationService<Prescription> specificationService;
 
-    public PrescriptionController(PrescriptionService prescriptionService) {
+    public PrescriptionController(PrescriptionService prescriptionService, PrescriptionRepository prescriptionRepository, SpecificationService specificationService) {
         this.prescriptionService = prescriptionService;
+        this.prescriptionRepository = prescriptionRepository;
+        this.specificationService = specificationService;
     }
 
     @PostMapping("/add-prescription")
@@ -56,6 +65,26 @@ public class PrescriptionController {
             return prescriptionService.getAllPrescription(searchTerm,sortBy,sortOrder,fromDate,toDate,doctorName,clinicName,pageNumber,pageSize);
 
     }
+    @PostMapping("/pagination")
+    public Page<PrescriptionResponse> getPrescriptionsUsingSpecificationAndPagination(@RequestBody RequestDto requestDto) {
+        Specification<Prescription> searchSpecification =specificationService
+                .getSearchSpecification(requestDto.getSearchRequestDto(), requestDto.getGlobalOperator());
+        Pageable pageable=new PageRequestDto().getPageable(requestDto.getPageRequestDto());
+
+       // return prescriptionRepository.findAll(searchSpecification,pageable);
+        return specificationService.getPrescriptionsUsingSpecificationAndPagination(searchSpecification,pageable);
+    }
+//    @PostMapping("/pagination/V1")
+//    public Page<PrescriptionResponse> getPrescriptionsUsingSpecification(@RequestBody RequestDto requestDto) {
+////        Specification<PrescriptionResponse> searchSpecification =specificationService
+////                .getSearchSpecification(requestDto.getSearchRequestDto(), requestDto.getGlobalOperator());
+////        Pageable pageable=new PageRequestDto().getPageable(requestDto.getPageRequestDto());
+//        Specification<PrescriptionResponse> responseSpecification=specificationService.getSearchSpecification(requestDto.getSearchRequestDto(),requestDto.getGlobalOperator());
+//
+//
+//
+//       // return prescriptionRepository.findAll(searchSpecification,pageable);
+//    }
 
 
 
