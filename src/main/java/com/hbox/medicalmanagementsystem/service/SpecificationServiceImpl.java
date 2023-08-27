@@ -19,74 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-//
-//@Service
-//public class SpecificationServiceImpl<T> implements SpecificationService<T> {
-//    @Override
-//    public Specification<T> getSearchSpecification(List<SearchRequestDto> searchRequestDto, RequestDto.GlobalOperator globalOperator) {
-//        return (root, query, criteriaBuilder) -> {
-//
-//            List<Predicate> predicates = new ArrayList<>();
-//
-//            for (SearchRequestDto requestDto : searchRequestDto) {
-//
-//
-//                switch (requestDto.getOperation()) {
-//
-//                    case EQUAL:
-//                        Predicate equal = criteriaBuilder.equal(root.get(requestDto.getColumn()), requestDto.getValue());
-//                        predicates.add(equal);
-//                        break;
-//
-//                    case LIKE:
-//                        Predicate like = criteriaBuilder.like(root.get(requestDto.getColumn()), "%" + requestDto.getValue() + "%");
-//                        predicates.add(like);
-//                        break;
-//
-//                    case IN:
-//                        String[] split = requestDto.getValue().split(",");
-//                        Predicate in = root.get(requestDto.getColumn()).in(Arrays.asList(split));
-//                        predicates.add(in);
-//                        break;
-//
-//                    case GREATER_THAN:
-//                        Predicate greaterThan = criteriaBuilder.greaterThan(root.get(requestDto.getColumn()), requestDto.getValue());
-//                        predicates.add(greaterThan);
-//                        break;
-//
-//                    case JOIN:
-//                        Predicate join = criteriaBuilder.equal(root.join(requestDto.getJoinTable()).get(requestDto.getColumn()), requestDto.getValue());
-//                        predicates.add(join);
-//                        break;
-//
-//                    case LESS_THAN:
-//                        Predicate lessThan = criteriaBuilder.lessThan(root.get(requestDto.getColumn()), requestDto.getValue());
-//                        predicates.add(lessThan);
-//                        break;
-//
-//                    case BETWEEN:
-//                        //"10, 20"
-//                        String[] split1 = requestDto.getValue().split(",");
-//                        Predicate between = criteriaBuilder.between(root.get(requestDto.getColumn()), Long.parseLong(split1[0]), Long.parseLong(split1[1]));
-//                        predicates.add(between);
-//                        break;
-//
-//                    default:
-//                        throw new IllegalStateException("Unexpected value: " + " ");
-//                }
-//
-//
-//            }
-//
-//
-//            if (globalOperator.equals(RequestDto.GlobalOperator.AND)) {
-//                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-//            } else {
-//                return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
-//            }
-//        };
-//    }
-//}
+
 @Service
 public class SpecificationServiceImpl<T> implements SpecificationService<T> {
 
@@ -103,12 +36,20 @@ public class SpecificationServiceImpl<T> implements SpecificationService<T> {
 
             for (SearchRequestDto requestDto : searchRequestDto) {
                 String[] columnPath = requestDto.getColumn().split("\\.");
-                String attributeName = columnPath[0];
+
                 Expression<?> attributeExpression;
+                int end = columnPath.length - 1;
+                int start = 0;
+                String attributeName = columnPath[end];
 
                 if (columnPath.length > 1) {
-                    Join<?, ?> join = root.join(attributeName, JoinType.LEFT);
-                    attributeExpression = join.get(columnPath[1]);
+                    Join<?, ?> joinedTable = root.join(columnPath[start], JoinType.LEFT);
+                    start++;
+                    while (start < end) {
+                        joinedTable = joinedTable.join(columnPath[start], JoinType.LEFT);
+                        start++;
+                    }
+                    attributeExpression = joinedTable.get(columnPath[end]);
                 } else {
                     attributeExpression = root.get(attributeName);
                 }
@@ -133,12 +74,12 @@ public class SpecificationServiceImpl<T> implements SpecificationService<T> {
                         break;
 
                     case GREATER_THAN_OR_EQUAL:
-                        Predicate greaterThanOrEqual=criteriaBuilder.greaterThanOrEqualTo(attributeExpression.as(LocalDateTime.class),LocalDateTime.parse(requestDto.getValue(),DateTimeFormatter.ISO_DATE_TIME));
+                        Predicate greaterThanOrEqual = criteriaBuilder.greaterThanOrEqualTo(attributeExpression.as(LocalDateTime.class), LocalDateTime.parse(requestDto.getValue(), DateTimeFormatter.ISO_DATE_TIME));
                         predicates.add(greaterThanOrEqual);
                         break;
 
                     case LESS_THAN_OR_EQUAL:
-                        Predicate lessThanOrEqual=criteriaBuilder.lessThanOrEqualTo(attributeExpression.as(LocalDateTime.class),LocalDateTime.parse(requestDto.getValue(),DateTimeFormatter.ISO_DATE_TIME));
+                        Predicate lessThanOrEqual = criteriaBuilder.lessThanOrEqualTo(attributeExpression.as(LocalDateTime.class), LocalDateTime.parse(requestDto.getValue(), DateTimeFormatter.ISO_DATE_TIME));
                         predicates.add(lessThanOrEqual);
                         break;
 
@@ -157,6 +98,7 @@ public class SpecificationServiceImpl<T> implements SpecificationService<T> {
             }
         };
     }
+
     @Override
     public Page<PrescriptionResponse> getPrescriptionsUsingSpecificationAndPagination(
             Specification<Prescription> specification, Pageable pageable) {
@@ -171,6 +113,7 @@ public class SpecificationServiceImpl<T> implements SpecificationService<T> {
                 () -> prescriptionRepository.count(specification));
 
     }
+
     private PrescriptionResponse mapToPrescriptionResponse(Prescription prescription) {
         PrescriptionResponse response = new PrescriptionResponse();
         response.setPrescriptionId(prescription.getPrescriptionId());

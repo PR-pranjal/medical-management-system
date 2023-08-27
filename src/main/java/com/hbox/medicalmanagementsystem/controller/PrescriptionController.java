@@ -62,7 +62,7 @@ public class PrescriptionController {
 
     ) {
 
-            return prescriptionService.getAllPrescription(searchTerm,sortBy,sortOrder,fromDate,toDate,doctorName,clinicName,pageNumber,pageSize);
+        return prescriptionService.getAllPrescription(searchTerm,sortBy,sortOrder,fromDate,toDate,doctorName,clinicName,pageNumber,pageSize);
 
     }
     @PostMapping("/pagination")
@@ -70,21 +70,9 @@ public class PrescriptionController {
         Specification<Prescription> searchSpecification =specificationService
                 .getSearchSpecification(requestDto.getSearchRequestDto(), requestDto.getGlobalOperator());
         Pageable pageable=new PageRequestDto().getPageable(requestDto.getPageRequestDto());
-
-       // return prescriptionRepository.findAll(searchSpecification,pageable);
         return specificationService.getPrescriptionsUsingSpecificationAndPagination(searchSpecification,pageable);
     }
-//    @PostMapping("/pagination/V1")
-//    public Page<PrescriptionResponse> getPrescriptionsUsingSpecification(@RequestBody RequestDto requestDto) {
-////        Specification<PrescriptionResponse> searchSpecification =specificationService
-////                .getSearchSpecification(requestDto.getSearchRequestDto(), requestDto.getGlobalOperator());
-////        Pageable pageable=new PageRequestDto().getPageable(requestDto.getPageRequestDto());
-//        Specification<PrescriptionResponse> responseSpecification=specificationService.getSearchSpecification(requestDto.getSearchRequestDto(),requestDto.getGlobalOperator());
-//
-//
-//
-//       // return prescriptionRepository.findAll(searchSpecification,pageable);
-//    }
+
 
 
 
